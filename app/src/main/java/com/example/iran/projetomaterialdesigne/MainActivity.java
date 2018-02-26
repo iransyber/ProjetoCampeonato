@@ -45,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        mToolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
+        mToolbar.setTitle("Selecione o campeonato");
+        mToolbar.setSubtitle("Acompanhe todos os campeonatos");
+        mToolbar.setLogo(R.drawable.ic_android_black_24dp);
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
