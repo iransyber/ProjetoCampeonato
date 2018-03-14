@@ -1,7 +1,8 @@
 package com.example.iran.projetomaterialdesigne;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,37 +10,40 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.iran.projetomaterialdesigne.Api.FootBallApi;
 import com.example.iran.projetomaterialdesigne.Models.Campeonatos.Liga;
 import com.example.iran.projetomaterialdesigne.Models.Campeonatos.ResponseCampeonatos;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     private Toolbar mToolbar;
-    private ArrayList<Liga> ligas;
+    private List<Liga> ligas;
     private ResponseCampeonatos res;
     private RecyclerView crecicleCampeonato;
     private LineAdapterCampeonato mAdapter;
+    private SwipeRefreshLayout myRefreshLista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ligas = new ArrayList<Liga>();
+        myRefreshLista = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+
+        ligas = new ArrayList<>();
         crecicleCampeonato = (RecyclerView)findViewById(R.id.recycler_campeonato);
         setupRecycler();
 
@@ -53,10 +57,20 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        ListarCompeticoes();
 
-        RequestParams params = new RequestParams();
+        myRefreshLista.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+             @Override
+             public void onRefresh() {
+                 ListarCompeticoes();
+             }
+           }
+        );
+    }
+
+    private void ListarCompeticoes(){
+        final RequestParams params = new RequestParams();
         params.put("?season", "2017");
-
         FootBallApi.getAllCompetitions(params, new JsonHttpResponseHandler(){
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -66,43 +80,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Gson g = new Gson();
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-                        Liga l = new Liga();
-                        JSONObject camp = new JSONObject();
-                        camp = response.getJSONObject(i);
-
-                        l.setId(camp.getInt("id"));
-                        l.setCaption(camp.getString("caption"));
-                        l.setLeague(camp.getString("league"));
-                        l.setYear(camp.getString("year"));
-                        l.setCurrentMatchday(camp.getInt("currentMatchday"));
-                        l.setNumberOfMatchdays(camp.getInt("numberOfMatchdays"));
-                        l.setNumberOfTeams(camp.getInt("numberOfTeams"));
-                        l.setNumberOfGames(camp.getInt("numberOfGames"));
-                        l.setLastUpdated(camp.getString("lastUpdated"));
-                        l.set_links(camp.getJSONObject("_links"));
-
-                        ligas.add(l);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                mAdapter.notifyDataSetChanged();
+                final List<Liga> ll = g.fromJson(response.toString(), new TypeToken<List<Liga>>(){}.getType());
+                mAdapter.updateDataSet(ll);
+                myRefreshLista.setRefreshing(false);
             }
         });
     }
 
     private void setupRecycler() {
-
         // Configurando o gerenciador de layout para ser uma lista.
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         crecicleCampeonato.setLayoutManager(layoutManager);
 
         // Adiciona o adapter que irá anexar os objetos à lista.
         // Está sendo criado com lista vazia, pois será preenchida posteriormente.
-        mAdapter = new LineAdapterCampeonato(ligas);
+        mAdapter = new LineAdapterCampeonato(ligas, onClickRecycleView);
         crecicleCampeonato.setAdapter(mAdapter);
 
         // Configurando um dividr entre linhas, para uma melhor visualização.
@@ -131,4 +123,11 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private final RecycleViewOnClickListener<Liga> onClickRecycleView = new RecycleViewOnClickListener<Liga>() {
+        @Override
+        public void onClickListener(final Liga liga) {
+            Toast.makeText(MainActivity.this, liga.getCaption(), Toast.LENGTH_SHORT).show();
+        }
+    };
 }

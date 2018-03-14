@@ -1,20 +1,24 @@
 package com.example.iran.projetomaterialdesigne;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.iran.projetomaterialdesigne.Models.Campeonatos.Liga;
 
-import java.util.ArrayList;
 import java.util.List;
 
-class LineAdapterCampeonato extends RecyclerView.Adapter<LineHolderCampeonato> {
+public class LineAdapterCampeonato extends RecyclerView.Adapter<LineAdapterCampeonato.LineHolderCampeonato> {
 
     private List<Liga> ligasReceived;
+    private RecycleViewOnClickListener<Liga> mRecycleCompeticaoOnClickListener;
 
-    public LineAdapterCampeonato(ArrayList<Liga> ligas) {
+    public LineAdapterCampeonato(List<Liga> ligas, @NonNull RecycleViewOnClickListener<Liga> listener) {
         ligasReceived = ligas;
+        mRecycleCompeticaoOnClickListener = listener;
     }
 
     @Override
@@ -32,5 +36,31 @@ class LineAdapterCampeonato extends RecyclerView.Adapter<LineHolderCampeonato> {
     @Override
     public int getItemCount() {
         return ligasReceived != null ? ligasReceived.size(): 0;
+    }
+
+    public void updateDataSet(final List<Liga> ligas) {
+        ligasReceived.clear();
+        ligasReceived.addAll(ligas);
+        notifyDataSetChanged();
+    }
+
+    class LineHolderCampeonato extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView caption;
+        private TextView campeonato;
+        private TextView ano;
+
+        public LineHolderCampeonato(View itemview) {
+            super(itemview);
+            caption = (TextView) itemView.findViewById(R.id.lbCaption);
+            campeonato = (TextView) itemView.findViewById(R.id.lbLeague);
+            ano = (TextView) itemView.findViewById(R.id.lbAno);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            final Liga item = ligasReceived.get(getAdapterPosition());
+            mRecycleCompeticaoOnClickListener.onClickListener(item);
+        }
     }
 }

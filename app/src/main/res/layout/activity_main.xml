@@ -17,12 +17,19 @@
             layout="@layout/toolbar" />
     </LinearLayout>
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_campeonato"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
-        android:layout_height="509dp"
-        android:layout_below="@+id/linearLayout"
-        tools:listitem="@layout/layout_campeonato"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linearLayout">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_campeonato"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/linearLayout"
+            tools:listitem="@layout/layout_campeonato"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

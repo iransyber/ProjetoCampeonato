@@ -18,13 +18,13 @@ public class Liga {
     private int numberOfTeams;
     private int numberOfGames;
     private String lastUpdated;
-    private JSONObject _links;
+    private Links _links;
 
-    public JSONObject get_links() {
+    public Links get_links() {
         return _links;
     }
 
-    public void set_links(JSONObject _links) {
+    public void set_links(Links _links) {
         this._links = _links;
     }
 
