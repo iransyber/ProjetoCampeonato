@@ -1,6 +1,8 @@
 package com.example.iran.projetomaterialdesigne;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -23,6 +25,8 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity  {
     private RecyclerView crecicleCampeonato;
     private LineAdapterCampeonato mAdapter;
     private SwipeRefreshLayout myRefreshLista;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +54,15 @@ public class MainActivity extends AppCompatActivity  {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        mToolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
+//        mToolbar.setNavigationIcon(R.drawable.ic_chevron_left_black_24dp);
         mToolbar.setTitle("Selecione o campeonato");
         mToolbar.setSubtitle("Acompanhe todos os campeonatos");
-        mToolbar.setLogo(R.drawable.ic_android_black_24dp);
+        mToolbar.setLogo(R.mipmap.ic_launcher_futebol_round);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+        collapsingToolbarLayout.setTitle("Animated Toolbar");
 
         ListarCompeticoes();
 
@@ -70,7 +77,9 @@ public class MainActivity extends AppCompatActivity  {
 
     private void ListarCompeticoes(){
         final RequestParams params = new RequestParams();
-        params.put("?season", "2017");
+        Calendar cal = Calendar.getInstance();
+        int ano = cal.get(Calendar.YEAR);
+        params.put("?season", ano);
         FootBallApi.getAllCompetitions(params, new JsonHttpResponseHandler(){
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -127,7 +136,10 @@ public class MainActivity extends AppCompatActivity  {
     private final RecycleViewOnClickListener<Liga> onClickRecycleView = new RecycleViewOnClickListener<Liga>() {
         @Override
         public void onClickListener(final Liga liga) {
-            Toast.makeText(MainActivity.this, liga.getCaption(), Toast.LENGTH_SHORT).show();
+            Intent it = new Intent(MainActivity.this, CompeticaoActivity.class);
+            it.putExtra("Liga", liga);
+            startActivity(it);
+//            Toast.makeText(MainActivity.this, liga.getCaption(), Toast.LENGTH_SHORT).show();
         }
     };
 }

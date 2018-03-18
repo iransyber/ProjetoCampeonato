@@ -2,13 +2,14 @@ package com.example.iran.projetomaterialdesigne.Models.Campeonatos;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by iran_ on 08/10/2017.
  */
 
-public class Liga {
+public class Liga implements Serializable {
     private int id;
     private String caption;
     private String league;

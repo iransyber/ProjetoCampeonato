@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/lbPosicaoTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="24dp"
+        android:text="1"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/lbTiamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="11dp"
+        android:layout_toEndOf="@+id/lbPosicaoTable"
+        android:text="Flamengo" />
+
+    <TextView
+        android:id="@+id/lbJogosTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/lbTiamName"
+        android:layout_below="@+id/lbPosicaoTable"
+        android:text="Jogos: 23" />
+
+    <TextView
+        android:id="@+id/lbPontosTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/lbJogosTable"
+        android:layout_marginStart="19dp"
+        android:layout_toEndOf="@+id/lbJogosTable"
+        android:text="Pontos: 50" />
+
+    <TextView
+        android:id="@+id/lbVitoriasTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/lbPontosTable"
+        android:layout_marginStart="14dp"
+        android:layout_toEndOf="@+id/lbPontosTable"
+        android:text="Vitorias: 20" />
+
+    <TextView
+        android:id="@+id/lbDerrotasTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/lbVitoriasTable"
+        android:layout_alignBottom="@+id/lbVitoriasTable"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@+id/lbVitoriasTable"
+        android:text="Derrotas: 30" />
+</RelativeLayout>

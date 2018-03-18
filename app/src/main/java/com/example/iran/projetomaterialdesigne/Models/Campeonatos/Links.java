@@ -1,10 +1,12 @@
 package com.example.iran.projetomaterialdesigne.Models.Campeonatos;
 
+import java.io.Serializable;
+
 /**
  * Created by iran_ on 08/10/2017.
  */
 
-public class Links {
+public class Links implements Serializable {
     private Self self;
     private Teams teams;
     private Fixtures fixtures;
